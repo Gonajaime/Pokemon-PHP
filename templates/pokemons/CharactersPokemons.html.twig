@@ -1,0 +1,20 @@
+{% extends "pokemons/BasePokemon.html.twig" %}
+{% block contenido %}
+
+<h2>Listado de Pokemons </h2>
+<div class="row row-cols-1 row-cols-md-2"> {# PARA CADA POKEMON #}
+      {% for pokemon in pokemons  %}
+      <div class="col mb-4" >
+            <div class="card" style="width: 18rem;"> <img src="{{pokemon.img}}" class="card-img-top">
+                  <div class="card-body">
+                        <h5 class="card-title">{{pokemon.name}}</h5>
+                        <p class="card-text">{{pokemon.description}}</p> <a href="#" class="btn btn-primary">Más Info</a>
+                        <p>{{pokemon.code}} </p>
+                  </div>
+            </div>
+      </div> {# FIN PARA FIN PARA #}
+      {% endfor %}
+</div>
+
+
+{% endblock %}
