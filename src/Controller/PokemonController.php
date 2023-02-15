@@ -3,15 +3,17 @@ namespace App\Controller;
 
 use App\Entity\Debilidad;
 use App\Entity\Pokemon;
+use App\Form\PokemonType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PokemonController extends AbstractController
 {
 
-    #[Route("/pokemon/{id}")]
+    #[Route("/pokemon/{id}", name:"infoPokemon")]
     public function showPokemon(EntityManagerInterface $doctrine, $id)
     {
         $repository = $doctrine->getRepository(Pokemon::class);
@@ -22,7 +24,25 @@ class PokemonController extends AbstractController
 
     }
 
-    #[Route("/pokemons")]
+    #[Route("/new/pokemon", name: "createPokemon")]
+    public function newPokemons(EntityManagerInterface $doctrine, Request $request)
+    {
+        $form=$this->createForm(PokemonType::class);
+        $form->handleRequest($request);//ve si se ha pasado o ricibido algun dato por el post
+        if($form-> isSubmitted() && $form->isValid()){
+            $pokemon= $form->getData();
+            $doctrine->persist($pokemon);
+            $doctrine->flush();
+            $this->addFlash("exito", "pokemon insertado correctamente") ;
+            return $this->redirectToRoute("galeriaPokemon");
+        }
+
+        return $this->renderForm("pokemons\CreatePokemon.html.twig", ["pokemonForm"=>$form]);
+
+    }
+
+
+    #[Route("/pokemons", name: "galeriaPokemon")]
     public function showPokemons(EntityManagerInterface $doctrine)
     {
         $repository = $doctrine->getRepository(Pokemon::class);
