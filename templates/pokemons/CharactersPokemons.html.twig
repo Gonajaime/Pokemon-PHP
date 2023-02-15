@@ -11,7 +11,12 @@
             <div class="card" style="width: 18rem;"> <img src="{{pokemon.img}}" class="card-img-top">
                   <div class="card-body">
                         <h5 class="card-title">{{pokemon.name}}</h5>
-                        <p class="card-text">{{pokemon.description}}</p> <a href="{{path("infoPokemon", {"id":pokemon.id})}}" class="btn btn-primary">Más Info</a>
+                        <p class="card-text">{{pokemon.description}}</p> 
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{path("infoPokemon", {"id":pokemon.id})}}" class="btn btn-primary">Más Info</a>
+                        {% endif %}
+                        <a href="{{path("editPokemon", {"id":pokemon.id})}}" class="btn btn-primary">Editar</a>
+                        <a href="{{path("deletePokemon", {"id":pokemon.id})}}" class="btn btn-primary">Borrar</a>
                   </div>
             </div>
       </div> {# FIN PARA FIN PARA #}

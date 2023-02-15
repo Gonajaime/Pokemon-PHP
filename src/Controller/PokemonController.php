@@ -5,6 +5,7 @@ use App\Entity\Debilidad;
 use App\Entity\Pokemon;
 use App\Form\PokemonType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +15,13 @@ class PokemonController extends AbstractController
 {
 
     #[Route("/pokemon/{id}", name:"infoPokemon")]
+    #[IsGranted('ROLE_ADMIN')]
     public function showPokemon(EntityManagerInterface $doctrine, $id)
     {
         $repository = $doctrine->getRepository(Pokemon::class);
         $pokemon = $repository->find($id);
 
         return $this->render("pokemons\showPokemon.html.twig", ["pokemon"=>$pokemon]);
-
 
     }
 
@@ -38,6 +39,38 @@ class PokemonController extends AbstractController
         }
 
         return $this->renderForm("pokemons\CreatePokemon.html.twig", ["pokemonForm"=>$form]);
+
+    }
+
+    #[Route("/edit/pokemon/{id}", name: "editPokemon")]
+    public function editPokemons(EntityManagerInterface $doctrine, Request $request, $id)
+    {
+        $repository = $doctrine->getRepository(Pokemon::class);
+        $pokemon = $repository->find($id);
+
+        $form=$this->createForm(PokemonType::class, $pokemon);
+        $form->handleRequest($request);//ve si se ha pasado o ricibido algun dato por el post
+        if($form-> isSubmitted() && $form->isValid()){
+            $pokemon= $form->getData();
+            $doctrine->persist($pokemon);
+            $doctrine->flush();
+            $this->addFlash("exito", "pokemon insertado correctamente");
+            return $this->redirectToRoute("galeriaPokemon");
+        }
+
+        return $this->renderForm("pokemons\CreatePokemon.html.twig", ["pokemonForm"=>$form]);
+
+    }
+
+    #[Route("/delete/pokemon/{id}", name:"deletePokemon")]
+    public function deletePokemon(EntityManagerInterface $doctrine, $id)
+    {
+        $repository = $doctrine->getRepository(Pokemon::class);
+        $pokemon = $repository->find($id);
+        $doctrine->remove($pokemon);
+        $doctrine->flush();
+
+        return $this->redirectToRoute('galeriaPokemon');
 
     }
 
