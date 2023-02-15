@@ -12,8 +12,13 @@
           <div class="col">
             <div class="row"><div class="col">{{pokemon.description}}</div></div>
             <div class="row">
+              <p>Debilidades:</p>
               <ul>
-                {# DEBILIDADES #}
+                {% for debilidad in pokemon.debilidades | default([]) %}
+                  
+                  <li>{{debilidad.name}}</li>
+                {% endfor %}
+                
               </ul>
             </div>
           </div>

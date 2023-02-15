@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Debilidad;
 use App\Entity\Pokemon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,6 +48,31 @@ class PokemonController extends AbstractController
         $pokemon3->setName("Pikachu");
         $pokemon3->setDescription("Cuando se enfada, este Pokémon descarga la energía que almacena en el interior de las bolsas de las mejillas.");
         $pokemon3->setImg("https://assets.pokemon.com/assets/cms2/img/pokedex/full/032.png");
+
+        $debilidad1 = new Debilidad ();
+        $debilidad1->setName("fuego");
+
+
+        $debilidad2 = new Debilidad ();
+        $debilidad2->setName("agua");
+
+        $debilidad3 = new Debilidad ();
+        $debilidad3->setName("veneno");
+
+        $debilidad4 = new Debilidad ();
+        $debilidad4->setName("electrico");
+
+        $pokemon1->addDebilidade($debilidad2);
+        $pokemon1->addDebilidade($debilidad3);
+        $pokemon1->addDebilidade($debilidad4);
+
+        $pokemon2->addDebilidade($debilidad1);
+        $pokemon2->addDebilidade($debilidad3);
+
+        $doctrine->persist($debilidad1);
+        $doctrine->persist($debilidad2);
+        $doctrine->persist($debilidad3);
+        $doctrine->persist($debilidad4);
 
         $doctrine->persist($pokemon1);
         $doctrine->persist($pokemon2);
