@@ -4,7 +4,7 @@ Start repository:
 
 2. cd ./ Pokemon-PHP and composer i
 
-3. Config database in . env o .env.local
+3. Create and config database .env.local
 
 4.  php bin/console doctrine:database:create
 
